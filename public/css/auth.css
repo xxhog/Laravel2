@@ -1,0 +1,174 @@
+/* auth.css — стили для входа и регистрации в стиле черный/серый/розовый */
+
+.auth-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* ФОРМА */
+.auth-form {
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    padding: 2rem;
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.auth-form:hover {
+    border-color: #ffd6e7;
+    box-shadow: 0 15px 40px rgba(255, 214, 231, 0.2);
+}
+
+.auth-title {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #ffd6e7;
+    padding-left: 1rem;
+}
+
+/* ПОЛЯ ВВОДА */
+.auth-input {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.auth-input:focus {
+    border-color: #ffd6e7;
+    box-shadow: 0 0 0 0.25rem rgba(255, 214, 231, 0.25);
+    background-color: white;
+}
+
+.auth-label {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* ОШИБКИ */
+.auth-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.auth-input.is-invalid {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+}
+
+.auth-input.is-invalid:focus {
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* ЧЕКБОКС */
+.auth-checkbox {
+    margin: 1.5rem 0;
+}
+
+.auth-checkbox .form-check-input {
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+
+.auth-checkbox .form-check-input:checked {
+    background-color: #ffd6e7;
+    border-color: #ffd6e7;
+}
+
+.auth-checkbox .form-check-input:focus {
+    border-color: #ffd6e7;
+    box-shadow: 0 0 0 0.25rem rgba(255, 214, 231, 0.25);
+}
+
+.auth-checkbox .form-check-label {
+    color: #333;
+}
+
+.auth-checkbox a {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #ffd6e7;
+}
+
+.auth-checkbox a:hover {
+    color: #ffd6e7;
+}
+
+/* КНОПКА */
+.auth-btn {
+    background-color: #333;
+    border: 2px solid #333;
+    color: white;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.auth-btn:hover {
+    background-color: transparent;
+    color: #333;
+}
+
+/* ССЫЛКА ПЕРЕКЛЮЧЕНИЯ */
+.auth-switch {
+    color: #666;
+    margin-bottom: 0;
+}
+
+.auth-switch a {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #ffd6e7;
+    padding-bottom: 2px;
+}
+
+.auth-switch a:hover {
+    color: #ffd6e7;
+}
+
+/* ГРИД ДЛЯ РЕГИСТРАЦИИ */
+.auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 576px) {
+    .auth-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* РАЗДЕЛИТЕЛЬ */
+.auth-divider {
+    margin: 1.5rem 0;
+    text-align: center;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd6e7, transparent);
+}
+
+.auth-divider span {
+    background-color: white;
+    padding: 0 1rem;
+    color: #666;
+    position: relative;
+    z-index: 1;
+}

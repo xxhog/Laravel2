@@ -1,0 +1,95 @@
+/* catalog.css — стили для каталога товаров */
+
+/* ЗАГОЛОВОК (если будет) */
+.catalog-title {
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+/* КАРТОЧКА ТОВАРА */
+.catalog-card {
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.catalog-card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+    border-color: #ffd6e7;
+}
+
+/* ИЗОБРАЖЕНИЕ */
+.catalog-card-image {
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 2px solid #ffd6e7;
+}
+
+/* ТЕКСТ */
+.catalog-card-title {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.catalog-card-title:hover {
+    color: #ffd6e7;
+}
+
+.catalog-card-description {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.catalog-card-price {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* КНОПКИ */
+.catalog-btn-outline {
+    background-color: transparent;
+    border: 2px solid #333;
+    color: #333;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.catalog-btn-outline:hover {
+    background-color: #333;
+    color: white;
+}
+
+.catalog-btn-outline:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.catalog-btn-outline:disabled:hover {
+    background-color: transparent;
+    color: #333;
+}
+
+.catalog-btn-pink {
+    background-color: #ffd6e7;
+    border: 2px solid #ffd6e7;
+    color: #333;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.catalog-btn-pink:hover {
+    background-color: #ffc0d0;
+    border-color: #ffc0d0;
+    color: #333;
+}

@@ -19,8 +19,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'login',
         'password',
+        'rules_accepted',
     ];
 
     /**
@@ -41,4 +42,27 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function currentCart(): ?Cart
+    {
+        return $this->carts()
+            ->where('status', 'active')
+            ->with('items')
+            ->first();
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
 }

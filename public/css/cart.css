@@ -1,0 +1,90 @@
+/* cart.css — стили для корзины */
+
+.cart-title {
+    color: #333;
+}
+
+/* СООБЩЕНИЯ */
+.cart-alert-success {
+    background-color: #ffd6e7;
+    color: #333;
+    border-color: #ffd6e7;
+}
+
+/* ТАБЛИЦА */
+.cart-table {
+    border-color: #ddd;
+}
+
+.cart-table thead {
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.cart-table tfoot {
+    background-color: #f8f8f8;
+}
+
+/* КАРТИНКА ТОВАРА */
+.cart-product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid #ffd6e7;
+    border-radius: 0.25rem;
+}
+
+/* ТЕКСТ */
+.cart-text-dark {
+    color: #333;
+}
+
+.cart-text-muted {
+    color: #666;
+}
+
+/* КНОПКИ */
+.cart-btn-black {
+    background-color: #333;
+    color: white;
+    border: none;
+}
+
+.cart-btn-black:hover {
+    background-color: #555;
+    color: white;
+}
+
+.cart-btn-black:disabled {
+    opacity: 0.5;
+}
+
+.cart-btn-pink {
+    background-color: #ffd6e7;
+    color: #333;
+    border: none;
+}
+
+.cart-btn-pink:hover {
+    background-color: #ffc0d0;
+    color: #333;
+}
+
+/* СЧЕТЧИК КОЛИЧЕСТВА */
+.cart-quantity-badge {
+    background-color: #ffd6e7;
+    color: #333;
+    border: 1px solid #ffd6e7;
+    border-radius: 0.25rem;
+    padding: 0.25rem 1rem;
+    font-weight: bold;
+}
+
+/* ПУСТАЯ КОРЗИНА */
+.cart-empty-title {
+    color: #333;
+}
+
+.cart-empty-text {
+    color: #666;
+}
