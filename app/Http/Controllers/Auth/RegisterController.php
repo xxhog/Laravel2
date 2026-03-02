@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/profile';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -50,12 +50,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'regex:/^[А-Яа-яЁё\s-]+$/u', 'max:191'],
-            'login' => ['required', 'regex:/^[A-Za-z0-9-]+$/', 'max:191', 'unique:users,login'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'rules' => ['accepted'],
-        ], [
-            'rules.accepted' => 'Необходимо согласие с правилами регистрации.',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -69,14 +66,8 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
-            'login' => $data['login'],
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'rules_accepted' => true,
         ]);
-    }
-
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
     }
 }

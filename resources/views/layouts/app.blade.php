@@ -7,71 +7,77 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Лили Роуз</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('public/js/app.js') }}" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/cart.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/catalog.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/product.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/profile.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
-
 </head>
 <body>
-    <div class="container-xxl" >
-        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: transparent !important;">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('landing.home') }}">Лили Роуз</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link{{ request()->routeIs('landing.catalog') ? ' active' : '' }}" href="{{ route('landing.catalog') }}">Каталог</a>
-                        <a class="nav-link{{ request()->routeIs('landing.contact') ? ' active' : '' }}" href="{{ route('landing.contact') }}">Где мы находимся?</a>
-                        @auth
-                            <a class="nav-link{{ request()->routeIs('landing.cart') ? ' active' : '' }}" href="{{ route('cart') }}">
-                                Корзина
-                            </a>
-                        @endauth
-                    </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav me-auto">
+
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                            @if (Route::has('login'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </li>
+                            @endif
+
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
                 </div>
-                @auth
-                    <div class="d-flex gap-2">
-                        <a class="btn btn-outline-secondary" href="{{ route('landing.profile') }}">Профиль</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-dark">Выйти</button>
-                        </form>
-                    </div>
-                @else
-                    <div class="d-flex gap-2">
-                        <a class="btn btn-outline-secondary" href="{{ route('login') }}">Войти</a>
-                        <a class="btn btn-dark" href="{{ route('register') }}">Регистрация</a>
-                    </div>
-                @endauth
             </div>
         </nav>
-    </div>
-    <main class="py-4">
-        @yield('content')
-    </main>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    @auth
 
-    @endauth
-    @stack('scripts')
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
 </body>
 </html>
