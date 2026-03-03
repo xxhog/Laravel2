@@ -1,75 +1,45 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container text-center my-5">
-        <h1 class="catalog-title mb-4">Аптечный каталог</h1>
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1>Аптечный каталог</h1>
+        <p class="text-muted">Найдено товаров: {{ $products->count() }}</p>
+    </div>
 
-{{-- Форма поиска и фильтрации --}}
-        <div class="row mb-5 justify-content-center">
-            <div class="col-md-6">
-                {{-- Исправлено имя маршрута на landing.catalog --}}
-                <form action="{{ route('landing.catalog') }}" method="GET" class="d-flex gap-2">
-                    <input type="text" name="search" class="form-control" placeholder="Поиск лекарств..." value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary">Найти</button>
-                    {{-- Полезная кнопка сброса --}}
-                    @if(request('search'))
-                        <a href="{{ route('landing.catalog') }}" class="btn btn-outline-secondary">Сбросить</a>
-                    @endif
-                </form>
-            </div>
-        </div>
-        <div class="row gy-4">
-            @foreach ($products as $product)
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="catalog-card card h-100 shadow-sm">
-                        {{-- Ссылка на товар и изображение --}}
-                        <a href="{{ route('landing.product', $product) }}" class="d-block text-decoration-none">
-                            <img src="{{ asset('images/landing/' . ($product->image_path ?? 'default_medicine.png')) }}"
-                                 class="catalog-card-image card-img-top p-3"
-                                 alt="{{ $product->title }}">
-                        </a>
+    {{-- Вывод категорий (теперь они приходят из контроллера) --}}
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+        <a href="{{ route('landing.catalog') }}" class="btn btn-sm btn-outline-primary rounded-pill">Все</a>
+        @foreach($categories as $category)
+            <a href="{{ route('landing.catalog', ['category' => $category]) }}" 
+               class="btn btn-sm {{ request('category') == $category ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill">
+                {{ $category }}
+            </a>
+        @endforeach
+    </div>
 
-                        <div class="card-body d-flex flex-column">
-                            <a href="{{ route('landing.product', $product) }}" class="text-decoration-none text-dark">
-                                <h5 class="catalog-card-title mb-1">{{ $product->title }}</h5>
-                                {{-- Добавляем отображение дозировки из поля specs --}}
-                                <small class="text-muted d-block mb-2">{{ $product->specs }}</small>
-                            </a>
-
-                            {{-- Ограничение описания --}}
-                            <p class="catalog-card-description flex-grow-1 text-secondary" style="font-size: 0.9rem;">
-                                {{ \Illuminate\Support\Str::limit($product->description, 60) }}
-                            </p>
-
-                            {{-- Метка "По рецепту" --}}
-                            @if($product->is_prescription)
-                                <div class="mb-2">
-                                    <span class="badge bg-danger">Нужен рецепт</span>
-                                </div>
-                            @endif
-
-                            <p class="catalog-card-price fw-bold fs-5 mb-3">
-                                {{ number_format($product->price, 0, ',', ' ') }} ₽
-                            </p>
-
-                            {{-- Кнопка покупки --}}
-                            @auth
-                                <form action="{{ route('cart.add', $product) }}" method="POST">
-                                    @csrf
-                                    <button class="catalog-btn-outline btn w-100"
-                                        {{ $product->stock === 0 ? 'disabled' : '' }}>
-                                        {{ $product->stock === 0 ? 'Нет в наличии' : 'В корзину' }}
-                                    </button>
-                                </form>
-                            @else
-                                <a href="{{ route('login') }}" class="btn btn-outline-secondary w-100">
-                                    Войдите, чтобы купить
-                                </a>
-                            @endauth
-                        </div>
+    <div class="row gy-4">
+        @forelse($products as $product)
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="{{ asset('storage/' . ($product->image_path ?? 'products/no_image.jpg')) }}" 
+                         class="card-img-top p-3" style="height: 180px; object-fit: contain;">
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title fs-6">{{ $product->title }}</h5>
+                        <p class="text-primary fw-bold mt-auto">{{ number_format($product->price, 0, '.', ' ') }} ₽</p>
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                            @csrf
+                            <button class="btn btn-sm btn-outline-primary w-100">В корзину</button>
+                        </form>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @empty
+            <div class="col-12 text-center py-5">
+                <h3>Товары не найдены</h3>
+                <a href="{{ route('landing.catalog') }}" class="btn btn-link">Сбросить фильтры</a>
+            </div>
+        @endforelse
     </div>
+</div>
 @endsection

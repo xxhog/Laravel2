@@ -20,8 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'login',
+        'email',          // ОБЯЗАТЕЛЬНО: без этого почта не сохранится
         'password',
-        'rules_accepted',
+        'rules_accepted', // Твое поле из миграции (галочка правил)
+        'role',           // Чтобы разделять обычных юзеров и админов
     ];
 
     /**

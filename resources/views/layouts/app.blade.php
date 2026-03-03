@@ -14,8 +14,9 @@
         .navbar { background-color: white; border-bottom: 2px solid #f8f9fa; }
         .footer { background-color: var(--secondary-color); color: white; margin-top: auto; }
         .main-content { flex: 1; }
-        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
-        .btn-primary:hover { background-color: #008f70; }
+        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: #008f70; color: white; }
+        .nav-link.active { color: var(--primary-color) !important; }
     </style>
 </head>
 <body>
@@ -59,26 +60,39 @@
                         </span>
                     </a>
 
-                    @auth
+                    @guest
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm px-3">Войти</a>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="btn btn-primary btn-sm px-3">Регистрация</a>
+                            @endif
+                        </div>
+                    @else
                         <div class="dropdown">
                             <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                <li><a class="dropdown-item" href="{{ route('landing.profile') }}">Профиль</a></li>
-                                <li><a class="dropdown-item" href="{{ route('landing.orders') }}">Заказы</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button class="dropdown-item text-danger">Выйти</button>
-                                    </form>
-                                </li>
-                            </ul>
+<ul class="dropdown-menu dropdown-menu-end shadow border-0">
+    {{-- Ссылка только для админа --}}
+    @if(Auth::user()->role === 'admin')
+        <li><a class="dropdown-item fw-bold text-primary" href="{{ route('admin') }}">
+            <i class="bi bi-speedometer2 me-1"></i> Панель управления
+        </a></li>
+        <li><hr class="dropdown-divider"></li>
+    @endif
+
+    <li><a class="dropdown-item" href="{{ route('landing.profile') }}">Профиль</a></li>
+    <li><a class="dropdown-item" href="{{ route('landing.orders') }}">Заказы</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="dropdown-item text-danger">Выйти</button>
+        </form>
+    </li>
+</ul>
                         </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm px-4">Войти</a>
-                    @endauth
+                    @endguest
                 </div>
             </div>
         </div>
@@ -98,9 +112,19 @@
     </main>
 
     <footer class="footer py-5 mt-5">
-        <div class="container text-center text-md-start">
+        <div class="container">
             <div class="row gy-4">
-                <div class="col-md-4">
+                <div class="col-md-4 text-center text-md-start">
                     <h5 class="fw-bold mb-3">Аптека "Здоровье"</h5>
-                    <p class="text-white-50 small">Ваш надежный партнер в мире здоровья.</p>
+                    <p class="text-white-50 small">Ваш надежный партнер в мире здоровья. Мы работаем для вас 24/7.</p>
                 </div>
+                <div class="col-md-8 text-center text-md-end">
+                    <p class="mb-0 text-white-50 small">&copy; 2026 Аптека "Здоровье". Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
