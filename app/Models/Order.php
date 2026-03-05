@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
@@ -12,18 +11,21 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'cart_id',
+        'total_price',
         'status',
     ];
 
-    public function user(): BelongsTo
+    // Связь: один заказ может содержать много товаров (OrderItem)
+    public function items()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(OrderItem::class);
     }
-
-    public function cart(): BelongsTo
+    public function cart()
     {
         return $this->belongsTo(Cart::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
-

@@ -54,9 +54,8 @@
                         <a href="{{ route('landing.product', $product->id) }}">
                             {{-- ИСПРАВЛЕН ПУТЬ К КАРТИНКЕ --}}
                             <img src="{{ asset('storage/' . ($product->image_path ?? 'products/no_image.jpg')) }}" 
-     class="card-img-top p-3" 
-     alt="{{ $product->title }}" 
-     style="height: 200px; object-fit: contain;">
+                                 class="card-img-top p-3" alt="{{ $product->title }}" 
+                                 style="height: 200px; object-fit: contain;">
                         </a>
                         <div class="card-body d-flex flex-column text-center">
                             <h5 class="card-title fs-6 fw-bold">{{ $product->title }}</h5>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Аптека "Здоровье" — Онлайн каталог</title>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
@@ -75,19 +75,31 @@
 <ul class="dropdown-menu dropdown-menu-end shadow border-0">
     {{-- Ссылка только для админа --}}
     @if(Auth::user()->role === 'admin')
-        <li><a class="dropdown-item fw-bold text-primary" href="{{ route('admin') }}">
-            <i class="bi bi-speedometer2 me-1"></i> Панель управления
-        </a></li>
+        <li>
+            <a class="dropdown-item fw-bold text-primary" href="{{ route('admin') }}">
+                <i class="bi bi-speedometer2 me-1"></i> Панель управления
+            </a>
+        </li>
         <li><hr class="dropdown-divider"></li>
     @endif
 
-    <li><a class="dropdown-item" href="{{ route('landing.profile') }}">Профиль</a></li>
-    <li><a class="dropdown-item" href="{{ route('landing.orders') }}">Заказы</a></li>
+    <li>
+        <a class="dropdown-item" href="{{ route('landing.profile') }}">
+            <i class="bi bi-person me-2"></i> Профиль
+        </a>
+    </li>
+    <li>
+        <a class="dropdown-item" href="{{ route('orders.index') }}">
+            <i class="bi bi-bag-check me-2"></i> Мои заказы
+        </a>
+    </li>
     <li><hr class="dropdown-divider"></li>
     <li>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit" class="dropdown-item text-danger">Выйти</button>
+            <button type="submit" class="dropdown-item text-danger">
+                <i class="bi bi-box-arrow-right me-2"></i> Выйти
+            </button>
         </form>
     </li>
 </ul>

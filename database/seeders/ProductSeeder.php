@@ -139,7 +139,7 @@ class ProductSeeder extends Seeder
                 'specs' => $item['specs'],
                 'stock' => $item['stock'],
                 'is_prescription' => $item['is_prescription'],
-                'image_path' => 'products/no_image.jpg',
+                'image_path' => 'images/no_image.jpg',
             ]);
         }
     }

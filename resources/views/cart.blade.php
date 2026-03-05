@@ -119,9 +119,12 @@
                     </button>
                 </form>
 
-                <a href="/404" class="btn btn-lg cart-btn-pink">
-                    Оформить заказ
-                </a>
+            <form action="{{ route('checkout.store') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-primary">
+        Оформить заказ
+    </button>
+</form>
             </div>
         @else
             {{-- ПУСТАЯ КОРЗИНА --}}

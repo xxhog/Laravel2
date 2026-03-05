@@ -54,7 +54,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-
     public function currentCart(): ?Cart
     {
         return $this->carts()
@@ -62,7 +61,11 @@ class User extends Authenticatable
             ->with('items')
             ->first();
     }
-
+    public function cartItems()
+    {
+        // Связь через корзину: User -> Cart -> CartItems
+        return $this->hasManyThrough(CartItem::class, Cart::class);
+    }
     public function cart()
     {
         return $this->hasOne(Cart::class);

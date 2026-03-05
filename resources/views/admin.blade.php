@@ -32,7 +32,7 @@
                     <tr data-status="{{ $order->status }}">
                         <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
                         <td>{{ $order->user->name ?? 'Неизвестно' }}</td>
-                        <td>{{ $order->cart->items->sum('quantity') ?? 0 }}</td>
+                        <td>{{ optional($order->cart)->items ? $order->cart->items->sum('quantity') : 0 }}</td>
                         <td>
                             <span class="admin-status
                                 @if($order->status == 'new') admin-status-new
@@ -137,6 +137,15 @@
                                 <input type="number" name="price" class="admin-input form-control" step="0.01" required>
                             </div>
                             <div class="mb-3">
+                                <label>Категория</label>
+                                <select name="category" class="form-control" required>
+                                    <option value="Обезболивающие">Обезболивающие</option>
+                                    <option value="Витамины">Витамины</option>
+                                    <option value="Антибиотики">Антибиотики</option>
+                                    <option value="Для желудка">Для желудка</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label class="admin-label">В наличии</label>
                                 <input type="number" name="stock" class="admin-input form-control" required>
                             </div>
@@ -150,7 +159,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="admin-label">Изображение</label>
-                                <input type="text" name="image_path" class="admin-input form-control" value="default.jpg">
+                                <input type="text" name="image_path" class="admin-input form-control" value="images/no_image.jpg">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="admin-btn-outline-black btn" data-bs-dismiss="modal">Отмена</button>

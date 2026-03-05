@@ -12,12 +12,11 @@ return new class extends Migration {
             $table->foreignId('cart_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('quantity')->default(1);
+
+            // ВОТ ЭТА СТРОКА ДОЛЖНА БЫТЬ ТУТ:
+            $table->decimal('price', 10, 2);
+
             $table->timestamps();
         });
-    }
-
-    public function down()
-    {
-        Schema::dropIfExists('cart_items');
     }
 };

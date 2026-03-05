@@ -39,27 +39,28 @@ class AdminController extends Controller
     }
 
     // ДОБАВЛЕНИЕ ТОВАРА
+    // app/Http/Controllers/AdminController.php
+
     public function storeProduct(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'nullable|string',
-            'specs' => 'nullable|string',
-            'image_path' => 'nullable|string'
+            'category' => 'required|string', // Обязательно для валидации
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
         ]);
 
         Product::create([
             'title' => $request->title,
+            'category' => $request->category, // <--- ЭТА СТРОКА РЕШАЕТ ПРОБЛЕМУ
             'price' => $request->price,
             'stock' => $request->stock,
             'description' => $request->description,
             'specs' => $request->specs,
-            'image_path' => $request->image_path ?? 'default.jpg'
+            'image_path' => $request->image_path ?? 'products/no_image.jpg',
         ]);
 
-        return redirect()->route('admin')->with('success', 'Товар успешно добавлен');
+        return redirect()->back()->with('success', 'Товар успешно добавлен!');
     }
 
     // ОБНОВЛЕНИЕ ТОВАРА

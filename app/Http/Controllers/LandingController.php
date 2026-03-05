@@ -63,27 +63,31 @@ class LandingController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        $orders = $user->orders()->with(['cart.items'])->latest()->get();
 
+        // Получаем все заказы пользователя с товарами
+        $allOrders = $user->orders()->with(['items.product'])->latest()->get();
+
+        // Фильтруем активные (новые или в обработке)
+        $activeOrders = $allOrders->whereIn('status', ['pending', 'processing']);
+
+        // Берем последние 5 для истории
+        $recentOrders = $allOrders->take(5);
+
+        // Считаем простую статистику
         $stats = [
-            'active' => $orders->whereIn('status', ['pending', 'processing'])->count(),
-            'processing' => $orders->where('status', 'processing')->count(),
-            'completed' => $orders->where('status', 'done')->count(),
+            'active' => $activeOrders->count(),
+            'completed' => $allOrders->where('status', 'done')->count(),
         ];
 
-        return view('profile', [
-            'user' => $user,
-            'activeOrders' => $orders->whereIn('status', ['pending', 'processing'])->take(2),
-            'recentOrders' => $orders->take(5),
-            'stats' => $stats
-        ]);
+        // Передаем ВСЕ переменные в компактном виде
+        return view('profile', compact('user', 'activeOrders', 'recentOrders', 'stats'));
     }
 
     public function orders()
     {
         $orders = Auth::user()
             ->orders()
-            ->with(['cart.items.product'])
+            ->with(['items.product'])
             ->latest()
             ->get();
 
