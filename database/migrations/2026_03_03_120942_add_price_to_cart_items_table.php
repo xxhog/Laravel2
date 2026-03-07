@@ -8,9 +8,8 @@ class AddPriceToCartItemsTable extends Migration
 {
     public function up()
     {
-        // Используем table, а не create, чтобы ОБНОВИТЬ существующую таблицу
+        // Используем table для обновления
         Schema::table('cart_items', function (Blueprint $table) {
-            // Добавляем колонку price, если её еще нет
             if (!Schema::hasColumn('cart_items', 'price')) {
                 $table->decimal('price', 10, 2)->after('quantity');
             }

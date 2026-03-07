@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Аптека "Здоровье" — Забота о вас</title>
     
-    {{-- Шрифты и Иконки --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
         :root { 
-            --primary-color: #0d6efd; /* Тот самый синий */
+            --primary-color: #0d6efd; 
             --bg-light: #f8faff; 
             --card-radius: 20px;
         }
@@ -26,7 +25,6 @@
             color: #2c3e50;
         }
 
-        /* Навигация */
         .navbar { 
             background-color: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px);
@@ -48,7 +46,6 @@
             color: var(--primary-color) !important;
         }
 
-        /* Поиск */
         .search-input {
             border-radius: 50px;
             padding-left: 1.5rem;
@@ -63,7 +60,6 @@
             border-color: var(--primary-color);
         }
 
-        /* Кнопки */
         .btn-primary { 
             border-radius: 50px; 
             padding: 0.5rem 1.5rem; 
@@ -83,7 +79,6 @@
             padding: 8px 15px;
         }
 
-        /* Футер */
         .footer { 
             background-color: white; 
             border-top: 1px solid #eee;
@@ -91,7 +86,6 @@
             margin-top: auto; 
         }
 
-        /* Уведомления */
         .alert {
             border-radius: 15px;
             border: none;
@@ -130,13 +124,11 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-3">
-                    {{-- Красивый поиск --}}
                     <form action="{{ route('landing.catalog') }}" method="GET" class="d-none d-md-flex position-relative">
                         <input type="text" name="search" class="form-control form-control-sm search-input px-4 py-2" placeholder="Найти лекарство..." value="{{ request('search') }}">
                         <i class="bi bi-search position-absolute end-0 me-3 mt-2 text-muted"></i>
                     </form>
                     
-                    {{-- Корзина --}}
                     <a href="{{ route('cart') }}" class="position-relative text-dark text-decoration-none p-2 bg-light rounded-circle transition">
                         <i class="bi bi-bag-plus fs-5"></i>
                         @php $count = Auth::check() && Auth::user()->cartItems ? Auth::user()->cartItems->sum('quantity') : 0; @endphp
@@ -210,7 +202,6 @@
 <footer class="footer py-5 mt-5">
         <div class="container">
             <div class="row gy-4">
-                {{-- Блок 1: О компании --}}
                 <div class="col-md-5">
                     <div class="d-flex align-items-center text-primary fw-bold mb-3">
                         <i class="bi bi-capsule-pill fs-4 me-2"></i> Аптека "Здоровье"
@@ -225,7 +216,6 @@
                     </div>
                 </div>
 
-                {{-- Блок 2: Навигация (теперь более заметная) --}}
                 <div class="col-md-3 offset-md-1">
                     <h6 class="fw-bold text-dark mb-3">Навигация</h6>
                     <ul class="list-unstyled small">
@@ -236,7 +226,6 @@
                     </ul>
                 </div>
 
-                {{-- Блок 3: Контакты и копирайт (вместо подписки) --}}
                 <div class="col-md-3 text-md-end">
                     <h6 class="fw-bold text-dark mb-3">Свяжитесь с нами</h6>
                     <p class="small text-muted mb-1">Горячая линия:</p>

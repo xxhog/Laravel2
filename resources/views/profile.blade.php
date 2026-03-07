@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container my-5">
-    {{-- ШАПКА КАБИНЕТА --}}
     <div class="row mb-5 align-items-end">
         <div class="col-md-8">
             <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-2">Профиль клиента</span>
@@ -18,7 +17,6 @@
     </div>
 
     <div class="row g-4">
-        {{-- ЛЕВАЯ КОЛОНКА: ИНФО --}}
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-custom overflow-hidden mb-4">
                 <div class="card-body p-4">
@@ -50,17 +48,14 @@
                 </div>
             </div>
 
-            {{-- ДОПОЛНИТЕЛЬНЫЙ БЛОК --}}
-            <div class="bg-primary bg-opacity-10 rounded-custom p-4 border border-primary border-opacity-10">
+               <div class="bg-primary bg-opacity-10 rounded-custom p-4 border border-primary border-opacity-10">
                 <h6 class="fw-bold text-primary mb-2"><i class="bi bi-info-circle me-2"></i>Помощь</h6>
                 <p class="small text-muted mb-0">Если у вас возникли вопросы по заказам, свяжитесь с нашей поддержкой.</p>
             </div>
         </div>
 
-        {{-- ПРАВАЯ КОЛОНКА: ЗАКАЗЫ --}}
         <div class="col-lg-8">
             
-            {{-- АКТИВНЫЕ ЗАКАЗЫ --}}
             <div class="d-flex align-items-center mb-4">
                 <h4 class="fw-bold text-dark mb-0">Текущие заказы</h4>
                 <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
@@ -105,7 +100,6 @@
                 @endforelse
             </div>
 
-            {{-- ИСТОРИЯ --}}
             <div class="d-flex align-items-center mb-4">
                 <h4 class="fw-bold text-dark mb-0">История покупок</h4>
                 <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
@@ -151,7 +145,6 @@
 </div>
 
 <style>
-    /* Кастомные закругления в 20px как на главной */
     .rounded-custom { border-radius: 20px !important; }
     
     .profile-order-card { 
@@ -165,7 +158,6 @@
         border-color: rgba(13, 110, 253, 0.1) !important;
     }
 
-    /* Убираем стандартные рамки у таблиц */
     .table th { font-weight: 700; letter-spacing: 0.5px; }
     .table td { border-bottom: 1px solid #f8f9fa; }
 </style>

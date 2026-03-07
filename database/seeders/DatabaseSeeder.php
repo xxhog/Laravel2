@@ -8,7 +8,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Оставляем только вызов твоего главного сидера с аптекой
+        //вызов продукт сидер с аптечным заполнением
         $this->call([
             ProductSeeder::class,
         ]);

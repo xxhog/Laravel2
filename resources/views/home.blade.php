@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- 1. Герой-секция с мягким градиентом --}}
     <div class="py-5 mb-5 shadow-sm" style="background: linear-gradient(135deg, #f0f7ff 0%, #e0eaff 100%); border-bottom: 1px solid #dee2e6;">
         <div class="container text-center py-5">
             <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-3">Забота о вас 24/7</span>
@@ -14,8 +13,7 @@
     </div>
 
     <div class="container">
-        {{-- 2. Секция преимуществ с иконками --}}
-        <div class="row text-center mb-5 g-4">
+         <div class="row text-center mb-5 g-4">
             <div class="col-md-4">
                 <div class="p-4 bg-white rounded-4 shadow-sm h-100 border">
                     <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
@@ -44,8 +42,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- 3. Блок "Популярные товары" --}}
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <h2 class="fw-bold mb-1">Популярные товары</h2>
@@ -58,17 +54,13 @@
     @forelse ($products as $product)
         <div class="col-6 col-md-4 col-lg-3">
             <div class="card h-100 border-0 shadow-sm product-card">
-                {{-- Метки (Рецепт и т.д.) --}}
                 <div class="position-absolute mt-2 ms-2" style="z-index: 2;">
                     @if($product->is_prescription)
                         <span class="badge bg-danger rounded-pill shadow-sm" style="font-size: 0.65rem;">По рецепту</span>
                     @endif
                 </div>
-
-                {{-- ССЫЛКА НА КАРТОЧКУ (Обертка картинки) --}}
                 <a href="{{ route('landing.product', $product->id) }}" class="p-3 text-center d-block">
                     @php
-                        // Убираем "public/" или "public\", так как сервер уже смотрит в public
                         $cleanPath = str_replace(['public/', 'public\\'], '', $product->image_path);
                     @endphp
                     
@@ -80,7 +72,6 @@
                 </a>
 
                 <div class="card-body d-flex flex-column p-3 pt-0 text-center">
-                    {{-- Заголовок тоже делаем ссылкой --}}
                     <h5 class="card-title fs-6 fw-bold text-dark mb-1" style="height: 2.4rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
                         <a href="{{ route('landing.product', $product->id) }}" class="text-decoration-none text-dark hover-primary">
                             {{ $product->title }}
@@ -120,10 +111,8 @@
     </div>
 
 <style>
-    /* Глобальные настройки аптечного стиля */
-    .rounded-4 { border-radius: 1rem !important; }
-    
-    /* Эффект карточек как в каталоге/контактах */
+     .rounded-4 { border-radius: 1rem !important; }
+
     .product-card {
         border-radius: 20px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -134,8 +123,7 @@
         box-shadow: 0 1rem 2rem rgba(13, 110, 253, 0.1) !important;
     }
 
-    /* Синие кнопки */
-    .btn-primary {
+     .btn-primary {
         background-color: #0d6efd;
         border: none;
     }

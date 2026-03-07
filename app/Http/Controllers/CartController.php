@@ -21,15 +21,12 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
-        // Получаем корзину пользователя
         $cart = $user->cart;
 
-        // Если корзины нет — создаём
         if (!$cart) {
             $cart = Cart::create(['user_id' => $user->id]);
         }
 
-        // 👇 БЕЗ ЭТОЙ СТРОКИ ТОВАРЫ НЕ ПОКАЖУТСЯ
         $cart->load('items.product');
 
         return view('cart', compact('cart'));
@@ -48,7 +45,7 @@ class CartController extends Controller
             try {
                 $cart = Cart::create(['user_id' => $user->id]);
             } catch (\Exception $e) {
-                dd($e->getMessage()); // 👈 ВЫПЛЮНЕТ ОШИБКУ
+                dd($e->getMessage());
             }
         }
 

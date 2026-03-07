@@ -10,13 +10,11 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Отключаем проверку ключей, чтобы разрешить очистку таблицы
+
         Schema::disableForeignKeyConstraints();
 
-        // 2. Очищаем таблицу полностью
         Product::truncate();
 
-        // 3. Включаем проверку ключей обратно
         Schema::enableForeignKeyConstraints();
 
         $products = [

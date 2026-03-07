@@ -13,25 +13,23 @@ class CheckoutController extends Controller
 {
     public function store(Request $request)
     {
-        // 1. Ищем корзину пользователя
+        //поиск корзины
         $cart = Cart::where('user_id', Auth::id())->with('items')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->back()->with('error', 'Ваша корзина пуста');
         }
 
-        // Используем транзакцию: либо всё сохранится, либо ничего (если будет сбой)
         DB::transaction(function () use ($cart) {
-            // 2. Создаем основной заказ
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'total_price' => $cart->items->sum(function ($item) {
                     return $item->price * $item->quantity;
                 }),
-                'status' => 'pending', // Статус "В ожидании"
+                'status' => 'pending',
             ]);
 
-            // 3. Переносим товары из корзины в заказ
+            //в заказ
             foreach ($cart->items as $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -40,11 +38,9 @@ class CheckoutController extends Controller
                     'price' => $cartItem->price,
                 ]);
 
-                // (Опционально) Уменьшаем остаток на складе
                 $cartItem->product->decrement('stock', $cartItem->quantity);
             }
 
-            // 4. Очищаем корзину после оформления
             $cart->items()->delete();
         });
 

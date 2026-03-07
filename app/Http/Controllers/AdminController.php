@@ -98,17 +98,15 @@ class AdminController extends Controller
     }
 
 
-    // Метод удаления товара
+    //удаляем товар
     public function destroyProduct(Product $product)
     {
-        // Проверяем, нет ли товара в активных корзинах
         $inItems = \DB::table('cart_items')->where('product_id', $product->id)->exists();
 
         if ($inItems) {
             return redirect()->back()->with('error', 'Нельзя удалить товар, который добавлен в корзины!');
         }
 
-        // Удаляем файл изображения
         if ($product->image_path && $product->image_path !== 'images/no_image.jpg') {
             if (\File::exists(public_path($product->image_path))) {
                 \File::delete(public_path($product->image_path));
@@ -119,6 +117,5 @@ class AdminController extends Controller
 
         return redirect()->route('admin')->with('success', 'Препарат удален из базы');
     }
-    // Замени финал на это для проверки
 
 }

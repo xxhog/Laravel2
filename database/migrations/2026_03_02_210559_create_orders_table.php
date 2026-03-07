@@ -8,7 +8,7 @@ class CreateOrdersTable extends Migration
 {
     public function up()
     {
-        // Создаем таблицу заказов
+        //таблицу заказов
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
         });
 
-        // Создаем таблицу позиций заказа (сразу после orders)
+        // позиции заказа
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
@@ -32,7 +32,6 @@ class CreateOrdersTable extends Migration
 
     public function down()
     {
-        // Удаляем в обратном порядке из-за внешних ключей
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
     }

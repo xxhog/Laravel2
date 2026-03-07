@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container my-5">
-    {{-- Хлебные крошки (Navigation) --}}
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('landing.home') }}" class="text-decoration-none">Главная</a></li>
@@ -12,11 +11,9 @@
     </nav>
 
     <div class="row g-5">
-        {{-- ЛЕВАЯ КОЛОНКА: ИЗОБРАЖЕНИЕ --}}
         <div class="col-lg-6">
             <div class="product-image-wrapper p-4 border rounded-4 bg-white shadow-sm d-flex align-items-center justify-content-center" style="min-height: 450px;">
                 @php
-                    // Чистим путь, как и в каталоге
                     $cleanPath = str_replace(['public/', 'public\\'], '', $product->image_path);
                 @endphp
 
@@ -28,10 +25,8 @@
             </div>
         </div>
 
-        {{-- ПРАВАЯ КОЛОНКА: ИНФОРМАЦИЯ --}}
         <div class="col-lg-6">
             <div class="ps-lg-3">
-                {{-- Бейдж --}}
                 @if($product->is_prescription)
                     <span class="badge bg-danger rounded-pill px-3 py-2 mb-3 shadow-sm">Нужен рецепт</span>
                 @endif
@@ -39,8 +34,7 @@
                 <h1 class="display-6 fw-bold mb-2">{{ $product->title }}</h1>
                 <p class="text-muted mb-4 small">Артикул: CS-{{ str_pad($product->id, 4, '0', STR_PAD_LEFT) }}</p>
 
-                {{-- Цена и наличие --}}
-                <div class="p-4 bg-light rounded-4 mb-4 border border-white shadow-sm">
+                  <div class="p-4 bg-light rounded-4 mb-4 border border-white shadow-sm">
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <span class="h1 fw-bold text-primary mb-0">{{ number_format($product->price, 0, ',', ' ') }} ₽</span>
                         @if($product->stock > 0)
@@ -52,13 +46,10 @@
                     <p class="text-muted small mb-0">Остаток на складе: {{ $product->stock }} шт.</p>
                 </div>
 
-                {{-- Описание --}}
                 <div class="mb-4">
                     <h5 class="fw-bold mb-3">Описание товара</h5>
                     <p class="text-secondary lh-lg" style="text-align: justify;">{{ $product->description }}</p>
                 </div>
-
-                {{-- Характеристики --}}
                 @if($product->specs)
                     <div class="mb-5">
                         <h5 class="fw-bold mb-3">Характеристики</h5>
@@ -76,8 +67,6 @@
                         </div>
                     </div>
                 @endif
-
-{{-- КНОПКИ ДЕЙСТВИЙ (БЕЗ СЕРДЕЧКА) --}}
                 <div class="d-grid gap-3">
                     @auth
                         @if($product->stock > 0)

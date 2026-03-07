@@ -28,7 +28,6 @@
             <div class="col-lg-10 mx-auto">
                 @foreach($orders as $order)
                     <div class="card mb-4 border-0 shadow-sm rounded-4 overflow-hidden">
-                        {{-- Шапка заказа --}}
                         <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
                             <div>
                                 <span class="text-muted small text-uppercase fw-bold">Номер заказа</span>
@@ -45,7 +44,6 @@
                             </div>
                         </div>
 
-                        {{-- Содержимое --}}
                         <div class="card-body px-4 py-4">
                             <div class="table-responsive">
                                 <table class="table table-borderless align-middle mb-0">
@@ -76,7 +74,6 @@
                             </div>
                         </div>
 
-                        {{-- Подвал заказа --}}
                         <div class="card-footer bg-light bg-opacity-50 border-0 px-4 py-3">
                             <div class="row align-items-center">
                                 <div class="col-sm-6 text-muted small">

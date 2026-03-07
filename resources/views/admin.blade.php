@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container my-5">
-    {{-- ШАПКА АДМИНКИ --}}
     <div class="row mb-5 align-items-center">
         <div class="col-md-6">
             <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-2">Управление системой</span>
@@ -21,8 +20,6 @@
             </div>
         </div>
     </div>
-
-    {{-- СЕКЦИЯ ЗАКАЗОВ --}}
     <div class="d-flex align-items-center mb-4">
         <h4 class="fw-bold text-dark mb-0"><i class="bi bi-cart-check me-2 text-primary"></i>Заказы клиентов</h4>
         <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
@@ -76,7 +73,6 @@
         </div>
     </div>
 
-    {{-- СЕКЦИЯ ТОВАРОВ --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center flex-grow-1">
             <h4 class="fw-bold text-dark mb-0"><i class="bi bi-box-seam me-2 text-primary"></i>Каталог товаров</h4>
@@ -129,7 +125,6 @@
     </div>
 </div>
 
-{{-- МОДАЛЬНЫЕ ОКНА РЕДАКТИРОВАНИЯ --}}
 @foreach($products as $product)
 <div class="modal fade" id="editModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -176,8 +171,6 @@
     </div>
 </div>
 @endforeach
-
-{{-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ --}}
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 rounded-custom shadow">

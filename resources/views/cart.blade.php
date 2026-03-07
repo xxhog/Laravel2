@@ -4,7 +4,6 @@
     <div class="container my-5">
         <h1 class="mb-4 cart-title">Корзина</h1>
 
-        {{-- СООБЩЕНИЯ --}}
         @if(session('success'))
             <div class="alert alert-dismissible fade show cart-alert-success">
                 {{ session('success') }}
@@ -19,7 +18,6 @@
             </div>
         @endif
 
-        {{-- ТОВАРЫ В КОРЗИНЕ --}}
         @if($cart->items->count() > 0)
             <div class="table-responsive">
                 <table class="table align-middle cart-table">
@@ -34,7 +32,6 @@
                     <tbody>
                     @foreach($cart->items as $item)
                         <tr>
-                            {{-- ТОВАР --}}
                             <td>
                             <div class="d-flex align-items-center">
                                 <div class="rounded-3 border overflow-hidden me-3" style="width: 60px; height: 60px; background: #f8f9fa;">
@@ -49,15 +46,12 @@
                             </div>
                             </td>
 
-                            {{-- СУММА --}}
                             <td class="fw-semibold cart-text-dark">
                                 {{ number_format($item->product->price * $item->quantity, 0, ',', ' ') }} ₽
                             </td>
 
-                            {{-- КНОПКИ + И - --}}
                             <td class="text-center">
                                 <div class="d-flex align-items-center gap-2">
-                                    {{-- МИНУС --}}
                                     <form action="{{ route('cart.update', $item) }}" method="POST" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item->quantity - 1 }}">
@@ -67,13 +61,10 @@
                                             <strong>−</strong>
                                         </button>
                                     </form>
-
-                                    {{-- ТЕКУЩЕЕ ЗНАЧЕНИЕ --}}
                                     <span class="cart-quantity-badge">
                                         {{ $item->quantity }}
                                     </span>
 
-                                    {{-- ПЛЮС --}}
                                     <form action="{{ route('cart.update', $item) }}" method="POST" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
@@ -85,8 +76,6 @@
                                     </form>
                                 </div>
                             </td>
-
-                            {{-- УДАЛИТЬ --}}
                             <td>
                                 <form action="{{ route('cart.remove', $item) }}" method="POST">
                                     @csrf
@@ -111,8 +100,6 @@
                     </tfoot>
                 </table>
             </div>
-
-            {{-- КНОПКИ ДЕЙСТВИЙ --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <form action="{{ route('cart.clear') }}" method="POST">
                     @csrf
@@ -130,7 +117,6 @@
 </form>
             </div>
         @else
-            {{-- ПУСТАЯ КОРЗИНА --}}
             <div class="text-center py-5">
                 <h3 class="mb-3 cart-empty-title">Корзина пуста</h3>
                 <p class="mb-4 cart-empty-text">Добавьте товары в корзину, чтобы оформить заказ</p>
