@@ -1,51 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container my-4 admin-container">
-        <h1 class="admin-title">Панель администратора</h1>
-
-        {{-- ФИЛЬТР ЗАКАЗОВ --}}
-        <div class="admin-filter-group">
-            <h4 class="mb-3">Фильтр заказов</h4>
-            <div class="btn-group" role="group">
-                <button type="button" class="admin-filter-btn btn active" data-filter="all">Все</button>
-                <button type="button" class="admin-filter-btn btn" data-filter="new">Новые</button>
-                <button type="button" class="admin-filter-btn btn" data-filter="confirmed">Подтвержденные</button>
-                <button type="button" class="admin-filter-btn btn" data-filter="cancelled">Отмененные</button>
+<div class="container my-5">
+    {{-- ШАПКА АДМИНКИ --}}
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-6">
+            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-2">Управление системой</span>
+            <h1 class="fw-bold text-dark mb-0">Панель администратора</h1>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <div class="d-inline-flex bg-white p-2 rounded-pill shadow-sm border">
+                <div class="px-3 border-end">
+                    <small class="text-muted d-block" style="font-size: 0.65rem; font-weight: 800; text-uppercase;">Заказов</small>
+                    <span class="fw-bold text-primary">{{ $orders->count() }}</span>
+                </div>
+                <div class="px-3">
+                    <small class="text-muted d-block" style="font-size: 0.65rem; font-weight: 800; text-uppercase;">Товаров</small>
+                    <span class="fw-bold text-primary">{{ $products->count() }}</span>
+                </div>
             </div>
         </div>
+    </div>
 
-        {{-- ТАБЛИЦА ЗАКАЗОВ --}}
-        <div class="table-responsive mb-4">
-            <table class="admin-table table table-bordered" id="ordersTable">
-                <thead>
-                <tr>
-                    <th>Таймстамп</th>
-                    <th>ФИО заказчика</th>
-                    <th>Количество товаров</th>
-                    <th>Статус</th>
-                    <th>Действия</th>
-                </tr>
+    {{-- СЕКЦИЯ ЗАКАЗОВ --}}
+    <div class="d-flex align-items-center mb-4">
+        <h4 class="fw-bold text-dark mb-0"><i class="bi bi-cart-check me-2 text-primary"></i>Заказы клиентов</h4>
+        <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-custom overflow-hidden mb-5">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">
+                        <th class="ps-4 py-3 text-uppercase fw-bold border-0">Дата и время</th>
+                        <th class="py-3 text-uppercase fw-bold border-0">Заказчик</th>
+                        <th class="py-3 text-uppercase fw-bold border-0">Статус заказа</th>
+                        <th class="pe-4 py-3 text-uppercase fw-bold border-0 text-end">Изменить статус</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @forelse($orders as $order)
-                    <tr data-status="{{ $order->status }}">
-                        <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
-                        <td>{{ $order->user->name ?? 'Неизвестно' }}</td>
-                        <td>{{ optional($order->cart)->items ? $order->cart->items->sum('quantity') : 0 }}</td>
+                    @foreach($orders as $order)
+                    <tr>
+                        <td class="ps-4">
+                            <div class="fw-bold text-dark">{{ $order->created_at->format('d.m.Y') }}</div>
+                            <small class="text-muted">{{ $order->created_at->format('H:i') }}</small>
+                        </td>
+                        <td class="fw-semibold">{{ $order->user->name ?? 'Гость' }}</td>
                         <td>
-                            <span class="admin-status
-                                @if($order->status == 'new') admin-status-new
-                                @elseif($order->status == 'confirmed') admin-status-confirmed
-                                @else admin-status-cancelled
-                                @endif">
-                                {{ ucfirst($order->status) }}
+                            @php
+                                $statusClass = [
+                                    'new' => 'bg-primary',
+                                    'confirmed' => 'bg-success',
+                                    'cancelled' => 'bg-danger'
+                                ][$order->status] ?? 'bg-secondary';
+                            @endphp
+                            <span class="badge {{ $statusClass }} bg-opacity-10 text-{{ str_replace('bg-', '', $statusClass) }} px-3 py-2 rounded-pill fw-bold" style="font-size: 0.7rem;">
+                                {{ strtoupper($order->status) }}
                             </span>
                         </td>
-                        <td>
-                            <form method="POST" action="{{ route('admin.orders.status', $order->id) }}" style="display: inline-block;">
+                        <td class="pe-4 text-end">
+                            <form method="POST" action="{{ route('admin.orders.status', $order->id) }}" class="d-inline-block">
                                 @csrf
-                                <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                                <select name="status" class="form-select form-select-sm rounded-pill border-light shadow-sm" onchange="this.form.submit()" style="min-width: 140px;">
                                     <option value="new" {{ $order->status == 'new' ? 'selected' : '' }}>Новый</option>
                                     <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Подтвержден</option>
                                     <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Отменен</option>
@@ -53,209 +70,187 @@
                             </form>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center">Заказов нет</td>
-                    </tr>
-                @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
+    </div>
 
-        {{-- УПРАВЛЕНИЕ ТОВАРАМИ --}}
-        <h2 class="admin-section-title">Управление товарами</h2>
-
-        <button class="admin-btn-pink btn mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
-            ➕ Добавить товар
-        </button>
-
-        <table class="admin-table table table-bordered" id="productsTable">
-            <thead>
-            <tr>
-                <th>Название</th>
-                <th>Цена</th>
-                <th>В наличии</th>
-                <th>Действия</th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse($products as $product)
-                <tr>
-                    <td>{{ $product->title }}</td>
-                    <td>{{ number_format($product->price, 0, ',', ' ') }} ₽</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>
-                        {{-- КНОПКА РЕДАКТИРОВАНИЯ --}}
-                        <button class="admin-btn-pink btn btn-sm me-2 edit-btn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editProductModal"
-                                data-id="{{ $product->id }}"
-                                data-title="{{ $product->title }}"
-                                data-price="{{ $product->price }}"
-                                data-stock="{{ $product->stock }}"
-                                data-description="{{ $product->description }}"
-                                data-specs="{{ $product->specs }}"
-                                data-image="{{ $product->image_path }}">
-                            Редактировать
-                        </button>
-
-                        {{-- ФОРМА УДАЛЕНИЯ --}}
-                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display: inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="admin-btn-black btn btn-sm" onclick="return confirm('Удалить товар?')">
-                                Удалить
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">Товаров нет</td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
-
-        {{-- МОДАЛКА ДОБАВЛЕНИЯ --}}
-        <div class="modal fade admin-modal" id="addProductModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">➕ Добавить товар</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="{{ route('admin.products.store') }}">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="admin-label">Название</label>
-                                <input type="text" name="title" class="admin-input form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="admin-label">Цена</label>
-                                <input type="number" name="price" class="admin-input form-control" step="0.01" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Категория</label>
-                                <select name="category" class="form-control" required>
-                                    <option value="Обезболивающие">Обезболивающие</option>
-                                    <option value="Витамины">Витамины</option>
-                                    <option value="Антибиотики">Антибиотики</option>
-                                    <option value="Для желудка">Для желудка</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="admin-label">В наличии</label>
-                                <input type="number" name="stock" class="admin-input form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="admin-label">Описание</label>
-                                <textarea name="description" class="admin-input form-control" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="admin-label">Характеристики</label>
-                                <textarea name="specs" class="admin-input form-control" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="admin-label">Изображение</label>
-                                <input type="text" name="image_path" class="admin-input form-control" value="images/no_image.jpg">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="admin-btn-outline-black btn" data-bs-dismiss="modal">Отмена</button>
-                                <button type="submit" class="admin-btn-pink btn">Добавить</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    {{-- СЕКЦИЯ ТОВАРОВ --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center flex-grow-1">
+            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-box-seam me-2 text-primary"></i>Каталог товаров</h4>
+            <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
         </div>
+        <button class="btn btn-primary rounded-pill px-4 ms-4 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-lg me-2"></i>Добавить товар
+        </button>
+    </div>
 
-        {{-- МОДАЛКА РЕДАКТИРОВАНИЯ --}}
-        <div class="modal fade admin-modal" id="editProductModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">✏️ Редактировать товар</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="" id="editProductForm">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="product_id" id="edit_product_id">
-
-                            <div class="mb-3">
-                                <label class="admin-label">Название</label>
-                                <input type="text" name="title" id="edit_title" class="admin-input form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="admin-label">Цена</label>
-                                <input type="number" name="price" id="edit_price" class="admin-input form-control" step="0.01" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="admin-label">В наличии</label>
-                                <input type="number" name="stock" id="edit_stock" class="admin-input form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="admin-label">Описание</label>
-                                <textarea name="description" id="edit_description" class="admin-input form-control" rows="3"></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="admin-label">Характеристики</label>
-                                <textarea name="specs" id="edit_specs" class="admin-input form-control" rows="3"></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="admin-label">Изображение</label>
-                                <input type="text" name="image_path" id="edit_image" class="admin-input form-control">
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="admin-btn-outline-black btn" data-bs-dismiss="modal">Отмена</button>
-                                <button type="submit" class="admin-btn-pink btn">Сохранить</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div class="card border-0 shadow-sm rounded-custom overflow-hidden mb-5">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">
+                        <th class="ps-4 py-3 text-uppercase fw-bold border-0">Препарат</th>
+                        <th class="py-3 text-uppercase fw-bold border-0">Категория</th>
+                        <th class="py-3 text-uppercase fw-bold border-0">Цена</th>
+                        <th class="pe-4 py-3 text-uppercase fw-bold border-0 text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($products as $product)
+                    <tr class="product-row">
+                        <td>
+                            <img src="{{ $product->image_path ? asset(str_replace(['public/', 'public\\'], '', $product->image_path)) : asset('images/no_image.jpg') }}" 
+                                class="rounded-2 border" 
+                                style="width: 40px; height: 40px; object-fit: cover;"
+                                onerror="this.src='{{ asset('images/no_image.jpg') }}'">
+                            </td>
+                        <td><span class="badge bg-light text-muted border px-2 py-1 rounded">{{ $product->category }}</span></td>
+                        <td><span class="fw-bold text-primary">{{ number_format($product->price, 0, ',', ' ') }} ₽</span></td>
+                        <td class="pe-4 text-end">
+                            <button class="btn btn-sm btn-outline-primary rounded-circle me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $product->id }}" title="Редактировать">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            
+                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('Удалить этот препарат из базы?')" title="Удалить">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
+
+{{-- МОДАЛЬНЫЕ ОКНА РЕДАКТИРОВАНИЯ --}}
+@foreach($products as $product)
+<div class="modal fade" id="editModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 rounded-custom shadow">
+            @csrf @method('PUT')
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold">Редактировать товар</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Название препарата</label>
+                    <input type="text" name="title" value="{{ $product->title }}" class="form-control rounded-3" required>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Цена (₽)</label>
+                        <input type="number" name="price" value="{{ $product->price }}" class="form-control rounded-3" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Склад (шт)</label>
+                        <input type="number" name="stock" value="{{ $product->stock }}" class="form-control rounded-3" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Категория</label>
+                    <select name="category" class="form-select rounded-3">
+                        <option value="Обезболивающие" {{ $product->category == 'Обезболивающие' ? 'selected' : '' }}>Обезболивающие</option>
+                        <option value="Витамины" {{ $product->category == 'Витамины' ? 'selected' : '' }}>Витамины</option>
+                        <option value="Антибиотики" {{ $product->category == 'Антибиотики' ? 'selected' : '' }}>Антибиотики</option>
+                        <option value="Простуда" {{ $product->category == 'Простуда' ? 'selected' : '' }}>Простуда</option>
+                    </select>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Новое изображение</label>
+                    <input type="file" name="image" class="form-control rounded-3">
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 p-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Отмена</button>
+                <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
+{{-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ --}}
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 rounded-custom shadow">
+            @csrf
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-primary">Добавить новый препарат</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Название</label>
+                    <input type="text" name="title" class="form-control rounded-3" placeholder="Введите название..." required>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Цена</label>
+                        <input type="number" name="price" class="form-control rounded-3" placeholder="0" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Склад</label>
+                        <input type="number" name="stock" class="form-control rounded-3" placeholder="0" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Категория</label>
+                    <select name="category" class="form-select rounded-3">
+                        <option value="Обезболивающие">Обезболивающие</option>
+                        <option value="Витамины">Витамины</option>
+                        <option value="Антибиотики">Антибиотики</option>
+                        <option value="Простуда">Простуда</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Описание</label>
+                    <textarea name="description" class="form-control rounded-3" rows="3"></textarea>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Фотография</label>
+                    <input type="file" name="image" class="form-control rounded-3" required>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 p-4">
+                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm fw-bold">Добавить в каталог</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .rounded-custom { border-radius: 20px !important; }
+    
+    .table thead th {
+        background-color: #f8faff;
+        color: #7c8db5;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        padding: 15px 10px;
+    }
+
+    .product-row { transition: all 0.2s; }
+    .product-row:hover { background-color: #f0f7ff !important; }
+
+    .form-control, .form-select {
+        border: 1px solid #edf2f7;
+        padding: 0.6rem 1rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.05);
+    }
+
+    .btn-outline-primary:hover, .btn-outline-danger:hover { color: white; }
+</style>
 @endsection
-
-@push('scripts')
-    <script>
-        // РЕДАКТИРОВАНИЕ ТОВАРА (ПРОСТОЙ JS)
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id = this.dataset.id;
-
-                document.getElementById('editProductForm').action = `/admin/products/${id}`;
-                document.getElementById('edit_product_id').value = id;
-                document.getElementById('edit_title').value = this.dataset.title;
-                document.getElementById('edit_price').value = this.dataset.price;
-                document.getElementById('edit_stock').value = this.dataset.stock;
-                document.getElementById('edit_description').value = this.dataset.description || '';
-                document.getElementById('edit_specs').value = this.dataset.specs || '';
-                document.getElementById('edit_image').value = this.dataset.image || 'default.jpg';
-            });
-        });
-
-        // ФИЛЬТР ЗАКАЗОВ
-        document.querySelectorAll('.admin-filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.admin-filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                const filter = this.dataset.filter;
-                document.querySelectorAll('#ordersTable tbody tr').forEach(row => {
-                    row.style.display = (filter === 'all' || row.dataset.status === filter) ? '' : 'none';
-                });
-            });
-        });
-    </script>
-@endpush

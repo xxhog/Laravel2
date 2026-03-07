@@ -22,7 +22,6 @@ class Product extends Model
         'specs',           // Дозировка и форма выпуска (напр., 200 мг, таблетки)
         'stock',           // Остаток на складе
         'image_path',      // Путь к изображению упаковки
-        'is_prescription', // Нужен ли рецепт (true/false)
     ];
 
     /**

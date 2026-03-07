@@ -36,14 +36,17 @@
                         <tr>
                             {{-- ТОВАР --}}
                             <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    @if($item->product->image_path)
-                                        <img src="{{ asset('images/landing/' . $item->product->image_path) }}"
-                                             alt="{{ $item->product->title }}"
-                                             class="cart-product-image">
-                                    @endif
-                                    <span class="cart-text-dark">{{ $item->product->title }}</span>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-3 border overflow-hidden me-3" style="width: 60px; height: 60px; background: #f8f9fa;">
+                                    <img src="{{ $item->product->image_path ? asset(str_replace(['public/', 'public\\'], '', $item->product->image_path)) : asset('images/no_image.jpg') }}" 
+                                        class="w-100 h-100 object-fit-contain" 
+                                        alt="{{ $item->product->title }}">
                                 </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ $item->product->title }}</h6>
+                                    <small class="text-muted">{{ $item->product->category }}</small>
+                                </div>
+                            </div>
                             </td>
 
                             {{-- СУММА --}}
